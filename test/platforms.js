@@ -11,8 +11,14 @@ describe('Platforms', function() {
 
         it('should detect windows_32', function() {
             platforms.detect('myapp-v0.25.1-win32-ia32.zip').should.be.exactly(platforms.WINDOWS_32);
+            platforms.detect('myapp-v0.25.1-win32-x86.zip').should.be.exactly(platforms.WINDOWS_32);
             platforms.detect('atom-1.0.9-delta.nupkg').should.be.exactly(platforms.WINDOWS_32);
             platforms.detect('RELEASES').should.be.exactly(platforms.WINDOWS_32);
+        });
+
+        it('should detect windows_64', function() {
+            platforms.detect('myapp-v0.25.1-win64-x64.zip').should.be.exactly(platforms.WINDOWS_64);
+            platforms.detect('myapp-v0.25.1-win64-x86_64.zip').should.be.exactly(platforms.WINDOWS_64);
         });
 
         it('should detect linux', function() {
@@ -38,6 +44,13 @@ describe('Platforms', function() {
             platforms.detect('atom-amd64.rpm').should.be.exactly(platforms.LINUX_RPM_64);
         });
 
+        it('should not interpret version as arch', function() {
+            platforms.detect('APP-1.0.5-alpha.325.dmg').should.be.exactly(platforms.OSX_64);
+            platforms.detect('APP-32.32.32-alpha.32323232.dmg').should.be.exactly(platforms.OSX_64);
+            platforms.detect('APP-32.32.32-alpha.32323232-darwin-64.zip').should.be.exactly(platforms.OSX_64);
+            platforms.detect('APP-64.64.64-alpha.64.nupkg').should.be.exactly(platforms.WINDOWS_32);
+            platforms.detect('APP-64.64.64-alpha.64.exe').should.be.exactly(platforms.WINDOWS_32);
+        });
     });
 
     describe('Resolve', function() {
