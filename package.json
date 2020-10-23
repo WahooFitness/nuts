@@ -50,5 +50,8 @@
   "scripts": {
     "start": "node bin/web.js",
     "test": "mocha --bail --reporter spec --timeout 600000 ./test/all.js"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
