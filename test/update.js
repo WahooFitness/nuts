@@ -32,7 +32,7 @@ describe('Update', function() {
                 .get('/update/osx/0.9.1-beta')
                 .expect('Content-Type', /json/)
                 .expect(function(res) {
-                    expect(res.body.name).toBe('1.0.0');
+                    expect(res.body.name).toBe('1.0.1-beta.0');
                 })
                 .expect(200, done);
             });
@@ -42,7 +42,7 @@ describe('Update', function() {
                 .get('/update/osx/0.9.1-beta.1')
                 .expect('Content-Type', /json/)
                 .expect(function(res) {
-                    expect(res.body.name).toBe('1.0.0');
+                    expect(res.body.name).toBe('1.0.1-beta.0');
                 })
                 .expect(200, done);
             });
@@ -52,7 +52,7 @@ describe('Update', function() {
                 .get('/update/osx/0.9.2-alpha.2')
                 .expect('Content-Type', /json/)
                 .expect(function(res) {
-                    expect(res.body.name).toBe('1.0.0');
+                    expect(res.body.name).toBe('1.1.0-alpha.0');
                 })
                 .expect(200, done);
             });
