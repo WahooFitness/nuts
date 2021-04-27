@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-
+require ('newrelic');
 var express = require('express');
 var uuid = require('uuid');
 var basicAuth = require('basic-auth');
