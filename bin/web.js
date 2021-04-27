@@ -8,6 +8,12 @@ var nuts = require('../');
 
 var app = express();
 
+var raygun = require('raygun');
+var raygunClient = new raygun.Client().init({ apiKey: process.env.RAYGUN_APIKEY });
+raygunClient.send(theError);
+
+
+
 var apiAuth =  {
     username: process.env.API_USERNAME,
     password: process.env.API_PASSWORD
@@ -118,6 +124,8 @@ app.use(function(err, req, res, next) {
         }
     });
 });
+// For express, at the end of the middleware definitions:
+app.use(raygunClient.expressHandler);
 
 myNuts.init()
 
