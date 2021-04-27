@@ -10,7 +10,6 @@ var app = express();
 
 var raygun = require('raygun');
 var raygunClient = new raygun.Client().init({ apiKey: process.env.RAYGUN_APIKEY });
-raygunClient.send(theError);
 
 
 
