@@ -54,6 +54,6 @@
     "test": "mocha --bail --reporter spec --timeout 600000 ./test/all.js"
   },
   "engines": {
-    "node": "12.x"
+    "node": "10.x"
   }
 }
