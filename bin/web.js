@@ -100,7 +100,7 @@ app.use(function(err, req, res, next) {
     var msg = err.message || err;
     var code = 500;
 
-    console.error(err.stack || err);
+    console.error("Error handled in express", msg, err.stack || err);
 
     // Return error
     res.format({
@@ -130,6 +130,6 @@ myNuts.init()
         console.log('Listening at http://%s:%s', host, port);
     });
 }, function(err) {
-    console.log(err.stack || err);
+    console.log("Http server error", err.stack || err);
     process.exit(1);
 });
