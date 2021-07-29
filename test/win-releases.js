@@ -11,7 +11,7 @@ describe('Windows RELEASES', function() {
         });
 
         it('should normalize the pre-release', function() {
-            winReleases.normVersion('1.0.0-alpha.1').should.be.exactly('1.0.0.100001');
+            winReleases.normVersion('1.0.1-alpha.1').should.be.exactly('1.0.1.100001');
             winReleases.normVersion('1.0.0-beta.1').should.be.exactly('1.0.0.200001');
             winReleases.normVersion('1.0.0-unstable.1').should.be.exactly('1.0.0.300001');
             winReleases.normVersion('1.0.0-rc.1').should.be.exactly('1.0.0.400001');
@@ -19,9 +19,9 @@ describe('Windows RELEASES', function() {
         });
 
         it('should correctly return to a semver', function() {
-            winReleases.toSemver('1.0.0.100001').should.be.exactly('1.0.0-alpha.1');
+            winReleases.toSemver('1.0.1.100001').should.be.exactly('1.0.1-alpha.1');
             winReleases.toSemver('1.0.0.200001').should.be.exactly('1.0.0-beta.1');
-            winReleases.toSemver('1.0.0.200015').should.be.exactly('1.0.0-beta.15');
+            winReleases.toSemver('9.3.7.200015').should.be.exactly('9.3.7-beta.15');
             winReleases.toSemver('1.0.0').should.be.exactly('1.0.0');
         });
 
