@@ -22,7 +22,7 @@
     "octocat": "0.10.2",
     "q": "1.2.0",
     "request": "2.60.0",
-    "s3": "~4.4.0",
+    "s3": "^4.4.0",
     "semver": "5.0.1",
     "stream-res": "1.0.1",
     "strip-bom": "2.0.0",
@@ -32,9 +32,11 @@
   },
   "devDependencies": {
     "expect": "^1.20.2",
-    "mocha": "1.18.2",
     "should": "7.0.4",
     "supertest": "^2.0.0"
+  },
+  "overrides": {
+    "minimist": "^1.2.6"
   },
   "bugs": {
     "url": "https://github.com/GitbookIO/nuts/issues"
