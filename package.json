@@ -19,7 +19,7 @@
     "lru-diskcache": "1.1.1",
     "newrelic": "^7.3.1",
     "nodemon": "^2.0.15",
-    "octocat": "0.10.2",
+    "octocat": "^1.2.1",
     "q": "1.2.0",
     "request": "2.60.0",
     "s3": "^4.4.0",
