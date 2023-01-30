@@ -7,6 +7,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "analytics-node": "^6.2.0",
+    "axios": "^1.2.6",
     "basic-auth": "1.0.3",
     "body-parser": "^1.19.0",
     "destroy": "1.0.3",
@@ -21,7 +22,6 @@
     "nodemon": "^2.0.15",
     "octocat": "^1.2.1",
     "q": "1.2.0",
-    "request": "2.60.0",
     "s3": "^4.4.0",
     "semver": "5.0.1",
     "stream-res": "1.0.1",
