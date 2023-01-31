@@ -6,7 +6,8 @@
   "homepage": "https://github.com/GitbookIO/nuts",
   "license": "Apache-2.0",
   "dependencies": {
-    "analytics-node": "1.2.2",
+    "analytics-node": "^6.2.0",
+    "axios": "^1.2.6",
     "basic-auth": "1.0.3",
     "body-parser": "^1.19.0",
     "destroy": "1.0.3",
@@ -15,14 +16,12 @@
     "feed": "^0.3.0",
     "github-webhook-handler": "0.5.0",
     "http-errors": "^1.5.0",
-    "lodash": "3.7.0",
+    "lodash": "^4.17.21",
     "lru-diskcache": "1.1.1",
     "newrelic": "^7.3.1",
     "nodemon": "^2.0.15",
-    "octocat": "0.10.2",
     "q": "1.2.0",
-    "request": "2.60.0",
-    "s3": "~4.4.0",
+    "s3": "^4.4.0",
     "semver": "5.0.1",
     "stream-res": "1.0.1",
     "strip-bom": "2.0.0",
@@ -32,9 +31,11 @@
   },
   "devDependencies": {
     "expect": "^1.20.2",
-    "mocha": "1.18.2",
     "should": "7.0.4",
     "supertest": "^2.0.0"
+  },
+  "overrides": {
+    "minimist": "^1.2.6"
   },
   "bugs": {
     "url": "https://github.com/GitbookIO/nuts/issues"
