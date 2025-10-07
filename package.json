@@ -22,7 +22,7 @@
     "q": "1.2.0",
     "request": "^2.88.2",
     "s3": "^4.4.0",
-    "semver": "5.0.1",
+    "semver": "5.7.2",
     "stream-res": "1.0.1",
     "strip-bom": "2.0.0",
     "understudy": "4.1.0",
