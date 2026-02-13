@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 require ('newrelic');
 var express = require('express');
-var uuid = require('uuid');
+var { v4: uuidv4 } = require('uuid');
 var basicAuth = require('basic-auth');
 var Analytics = require('analytics-node');
 var nuts = require('../');
@@ -69,7 +69,7 @@ myNuts.after('download', function(download, next) {
 
         analytics.track({
             event: downloadEvent,
-            anonymousId: userId? null : uuid.v4(),
+            anonymousId: userId? null : uuidv4(),
             userId: userId,
             properties: {
                 version: download.version.tag,
