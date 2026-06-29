@@ -1,0 +1,91 @@
+name: Deploy to Wahoo Cloud
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      GIT_SHA:
+        description: "Target git short sha to deploy to production (defaults to latest on master)"
+        required: false
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Push to master -> staging
+  deploy-staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: wf-ubuntu-arm64-on-demand
+    timeout-minutes: 60
+
+    steps:
+      - name: Load secrets
+        uses: 1password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4.0.0
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          AWS_ACCESS_KEY_ID: op://PROD_toes/WAHOOLIGAN_AWS_ACCESS_KEY/notesPlain
+          AWS_SECRET_ACCESS_KEY: op://PROD_toes/WAHOOLIGAN_AWS_SECRET_ACCESS_KEY/notesPlain
+          WAHOOCI_GITHUB_TOKEN: op://PROD_toes/WAHOOCI_GITHUB_TOKEN/notesPlain
+          WAHOOCI_DOCKER_HUB_PASSWORD: op://PROD_toes/WAHOOCI_DOCKER_HUB_PASSWORD/notesPlain
+          SLACK_BOT_TOKEN: op://PROD_toes/SLACK_BOT_TOKEN/notesPlain
+      - name: Deploy app container image
+        id: deploy-staging
+        uses: WahooFitness/deploy-container-action@main
+        with:
+          WAHOOCI_GITHUB_TOKEN: ${{ env.WAHOOCI_GITHUB_TOKEN }}
+          WAHOOCI_DOCKER_HUB_PASSWORD: ${{ env.WAHOOCI_DOCKER_HUB_PASSWORD }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: "bot-mfe-deployments"
+          APP_NAME: "nuts"
+          VALUES_FILE: stg.values.yaml
+          CHART_NAME: wahoo-mfe-chart
+          EKS_CLUSTER_NAME: wf-stg-eks-wahoo-cloud
+          AWS_REGION: us-east-1
+          ENVIRONMENT: stg
+
+  # Manual -> production
+  deploy-prod:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: wf-ubuntu-arm64-on-demand
+    timeout-minutes: 60
+
+    steps:
+      - name: Load secrets
+        uses: 1password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4.0.0
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          AWS_ACCESS_KEY_ID: op://PROD_toes/WAHOOLIGAN_AWS_ACCESS_KEY/notesPlain
+          AWS_SECRET_ACCESS_KEY: op://PROD_toes/WAHOOLIGAN_AWS_SECRET_ACCESS_KEY/notesPlain
+          WAHOOCI_GITHUB_TOKEN: op://PROD_toes/WAHOOCI_GITHUB_TOKEN/notesPlain
+          WAHOOCI_DOCKER_HUB_PASSWORD: op://PROD_toes/WAHOOCI_DOCKER_HUB_PASSWORD/notesPlain
+          SLACK_BOT_TOKEN: op://PROD_toes/SLACK_BOT_TOKEN/notesPlain
+      - name: Deploy app container image
+        id: deploy-prod
+        uses: WahooFitness/deploy-container-action@main
+        with:
+          WAHOOCI_GITHUB_TOKEN: ${{ env.WAHOOCI_GITHUB_TOKEN }}
+          WAHOOCI_DOCKER_HUB_PASSWORD: ${{ env.WAHOOCI_DOCKER_HUB_PASSWORD }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: "bot-mfe-deployments"
+          APP_NAME: "nuts"
+          VALUES_FILE: prd.values.yaml
+          CHART_NAME: wahoo-mfe-chart
+          EKS_CLUSTER_NAME: wf-prd-eks-wahoo-cloud
+          AWS_REGION: us-east-1
+          ENVIRONMENT: prd
+          GIT_SHA: ${{ github.event.inputs.GIT_SHA }}
+      - name: Emit deployment event
+        uses: WahooFitness/wf-github-actions/actions/deployment-event@main
+        with:
+          service: systm-release-server
+          platform: web
+          environment: production
+          status: ${{ steps.deploy-prod.outcome }}
