@@ -1,0 +1,32 @@
+appName: nuts
+image:
+  repository: 708632609614.dkr.ecr.us-east-1.amazonaws.com/nuts
+container:
+  port: 5000
+  command: ["npm"]
+  args: ["start"]
+resources:
+  limits:
+    memory: 400Mi
+  requests:
+    cpu: 50m
+    memory: 150Mi
+envVars:
+  # Non-secret config
+  S3_BUCKET: systm-releases-stg
+  S3_REGION: us-east-1
+  TRUST_PROXY: "true"
+  # Secrets injected from 1Password (enableSecretInjection: true)
+  S3_KEY: op://STAGING_nuts/S3_KEY/notesPlain
+  S3_SECRET: op://STAGING_nuts/S3_SECRET/notesPlain
+  API_USERNAME: op://STAGING_nuts/API_USERNAME/notesPlain
+  API_PASSWORD: op://STAGING_nuts/API_PASSWORD/notesPlain
+service:
+  type: ClusterIP
+  port: 5000
+ingress:
+  enabled: false
+  hostUrl: systm-download.staging.wahooligan.com
+enableSecretInjection: true
+gateway:
+  enabled: true

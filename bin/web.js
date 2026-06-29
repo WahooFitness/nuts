@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-require ('newrelic');
 var express = require('express');
 var { v4: uuidv4 } = require('uuid');
 var basicAuth = require('basic-auth');
@@ -93,6 +92,13 @@ if (process.env.TRUST_PROXY) {
     }
 }
 
+// Unauthenticated health endpoint for Kubernetes liveness/readiness probes.
+// Must be registered before the nuts router (which 404s unknown paths) and is
+// intentionally outside the basic-auth-gated /api/* routes.
+app.get('/health', function(req, res) {
+    res.status(200).send('ok');
+});
+
 app.use(myNuts.router);
 
 // Error handling
@@ -132,6 +138,17 @@ myNuts.init()
 
         console.log('Listening at http://%s:%s', host, port);
     });
+
+    // Graceful shutdown: stop accepting new connections, let in-flight
+    // requests finish, then exit. Kubernetes sends SIGTERM on pod termination.
+    function shutdown(signal) {
+        console.log('Received %s, shutting down gracefully', signal);
+        server.close(function() {
+            process.exit(0);
+        });
+    }
+    process.on('SIGTERM', function() { shutdown('SIGTERM'); });
+    process.on('SIGINT', function() { shutdown('SIGINT'); });
 }, function(err) {
     console.log("Http server error", err.stack || err);
     process.exit(1);
